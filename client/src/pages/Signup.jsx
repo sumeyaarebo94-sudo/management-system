@@ -9,7 +9,9 @@ const Signup = () => {
     name: "",
     email: "",
     password: "",
-    role: "User",
+    confirmPassword: "",
+    division: "",
+    year: "",
   });
 
   const [error, setError] = useState("");
@@ -25,14 +27,34 @@ const Signup = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     setError("");
     setSuccess("");
-    setLoading(true);
+
+    if (formData.password.length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
 
     try {
-      await api.post("/auth/signup", formData);
+      setLoading(true);
 
-      setSuccess("Account created successfully. You can now log in.");
+      await api.post("/auth/signup", {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        division: formData.division,
+        year: formData.year,
+      });
+
+      setSuccess(
+        "Account created successfully. You can now log in."
+      );
 
       setTimeout(() => {
         navigate("/login");
@@ -51,31 +73,36 @@ const Signup = () => {
     <div className="signup-page">
       <div className="signup-card">
         <h1>Sign Up</h1>
-
         <p>Create your account</p>
 
-        {error && <div className="error-message">{error}</div>}
+        {error && (
+          <div className="error-message">
+            {error}
+          </div>
+        )}
 
-        {success && <div className="success-message">{success}</div>}
+        {success && (
+          <div className="success-message">
+            {success}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="name">Name</label>
-
+            <label htmlFor="name">Full Name</label>
             <input
               id="name"
               name="name"
               type="text"
               value={formData.name}
               onChange={handleChange}
-              placeholder="Enter your name"
+              placeholder="Enter your full name"
               required
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="email">Email</label>
-
+            <label htmlFor="email">Email Address</label>
             <input
               id="email"
               name="email"
@@ -89,35 +116,67 @@ const Signup = () => {
 
           <div className="form-group">
             <label htmlFor="password">Password</label>
-
             <input
               id="password"
               name="password"
               type="password"
               value={formData.password}
               onChange={handleChange}
-              placeholder="Enter your password"
+              placeholder="Minimum 8 characters"
+              minLength={8}
               required
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="role">Role</label>
+            <label htmlFor="confirmPassword">
+              Confirm Password
+            </label>
 
-            <select
-              id="role"
-              name="role"
-              value={formData.role}
+            <input
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              value={formData.confirmPassword}
               onChange={handleChange}
-            >
-              <option value="User">User</option>
-              <option value="Supervisor">Supervisor</option>
-              <option value="Admin">Admin</option>
-            </select>
+              placeholder="Confirm your password"
+              minLength={8}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="division">Division</label>
+
+            <input
+              id="division"
+              name="division"
+              type="text"
+              value={formData.division}
+              onChange={handleChange}
+              placeholder="Enter your division"
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="year">Year</label>
+
+            <input
+              id="year"
+              name="year"
+              type="text"
+              value={formData.year}
+              onChange={handleChange}
+              placeholder="Enter your year"
+              required
+            />
           </div>
 
           <button type="submit" disabled={loading}>
-            {loading ? "Creating account..." : "Sign Up"}
+            {loading
+              ? "Creating account..."
+              : "Sign Up"}
           </button>
         </form>
 

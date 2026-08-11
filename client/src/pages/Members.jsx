@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 
 const Members = () => {
   const { user } = useAuth();
-
+  
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");

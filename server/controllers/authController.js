@@ -4,9 +4,56 @@ const User = require("../models/User");
 
 const signup = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const {
+      name,
+      email,
+      password,
+      confirmPassword,
+      division,
+      year,
+    } = req.body;
 
-    const existingUser = await User.findOne({ email });
+    // Required fields
+    if (
+      !name ||
+      !email ||
+      !password ||
+      !confirmPassword ||
+      !division ||
+      !year
+    ) {
+      return res.status(400).json({
+        message: "All fields are required",
+      });
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        message: "Please provide a valid email address",
+      });
+    }
+
+    // Password validation
+    if (password.length < 8) {
+      return res.status(400).json({
+        message: "Password must be at least 8 characters",
+      });
+    }
+
+    // Confirm password
+    if (password !== confirmPassword) {
+      return res.status(400).json({
+        message: "Passwords do not match",
+      });
+    }
+
+    // Check existing user
+    const existingUser = await User.findOne({
+      email: email.toLowerCase(),
+    });
 
     if (existingUser) {
       return res.status(400).json({
@@ -14,28 +61,35 @@ const signup = async (req, res) => {
       });
     }
 
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Public signup ALWAYS creates a normal User
     const user = await User.create({
       name,
-      email,
+      email: email.toLowerCase(),
       password: hashedPassword,
-      role,
+      division,
+      year,
+      role: "User",
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       message: "User created successfully",
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
+        division: user.division,
+        year: user.year,
         role: user.role,
       },
     });
   } catch (error) {
-    res.status(500).json({
+    console.error("Signup error:", error);
+
+    return res.status(500).json({
       message: "Server error",
-      error: error.message,
     });
   }
 };
@@ -44,7 +98,15 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    if (!email || !password) {
+      return res.status(400).json({
+        message: "Email and password are required",
+      });
+    }
+
+    const user = await User.findOne({
+      email: email.toLowerCase(),
+    });
 
     if (!user) {
       return res.status(400).json({
@@ -74,22 +136,28 @@ const login = async (req, res) => {
       }
     );
 
-    res.status(200).json({
+    return res.status(200).json({
       message: "Login successful",
       token,
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
+        division: user.division,
+        year: user.year,
         role: user.role,
       },
     });
   } catch (error) {
-    res.status(500).json({
+    console.error("Login error:", error);
+
+    return res.status(500).json({
       message: "Server error",
-      error: error.message,
     });
   }
 };
 
-module.exports = { signup, login };
+module.exports = {
+  signup,
+  login,
+};

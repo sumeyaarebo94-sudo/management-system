@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import Members from "./pages/Members";
 import Attendance from "./pages/Attendance";
@@ -11,44 +12,68 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 function App() {
   return (
     <Routes>
-      {/* Login */}
+      {/* Public */}
       <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
 
-      {/* Dashboard */}
+      {/* Dashboard - all authenticated users */}
       <Route
         path="/dashboard"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute
+            allowedRoles={[
+              "Admin",
+              "Supervisor",
+              "User",
+            ]}
+          >
             <Dashboard />
           </ProtectedRoute>
         }
       />
 
-      {/* Members */}
+      {/* Members - all authenticated users */}
       <Route
         path="/members"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute
+            allowedRoles={[
+              "Admin",
+              "Supervisor",
+              "User",
+            ]}
+          >
             <Members />
           </ProtectedRoute>
         }
       />
 
-      {/* Attendance */}
+      {/* Attendance - Admin and Supervisor only */}
       <Route
         path="/attendance"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute
+            allowedRoles={[
+              "Admin",
+              "Supervisor",
+            ]}
+          >
             <Attendance />
           </ProtectedRoute>
         }
       />
 
-      {/* Reports */}
+      {/* Reports - all authenticated users */}
       <Route
         path="/reports"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute
+            allowedRoles={[
+              "Admin",
+              "Supervisor",
+              "User",
+            ]}
+          >
             <Reports />
           </ProtectedRoute>
         }
@@ -57,13 +82,23 @@ function App() {
       {/* Default */}
       <Route
         path="/"
-        element={<Navigate to="/dashboard" replace />}
+        element={
+          <Navigate
+            to="/dashboard"
+            replace
+          />
+        }
       />
 
-      {/* Unknown routes */}
+      {/* Unknown route */}
       <Route
         path="*"
-        element={<Navigate to="/login" replace />}
+        element={
+          <Navigate
+            to="/login"
+            replace
+          />
+        }
       />
     </Routes>
   );
