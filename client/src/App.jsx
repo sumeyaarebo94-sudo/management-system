@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Members from "./pages/Members";
+import Attendance from "./pages/Attendance";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 function App() {
@@ -23,6 +24,15 @@ function App() {
         element={
           <ProtectedRoute>
             <Members />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/attendance"
+        element={
+          <ProtectedRoute>
+            <Attendance />
           </ProtectedRoute>
         }
       />
