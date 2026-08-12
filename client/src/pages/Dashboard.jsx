@@ -1,4 +1,9 @@
-import { useAuth } from "../context/AuthContext";
+cd ~/projects/management-sys
+c
+c
+
+tem/client
+nano src/pages/Dashboard.jsximport { useAuth } from "../context/AuthContext";
 
 const Dashboard = () => {
   const { user } = useAuth();
