@@ -105,31 +105,57 @@ const Attendance = () => {
         : "",
       status: record.status,
     });
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
   return (
     <div className="attendance-page">
-      <div className="attendance-header">
-        <h1>Attendance</h1>
-        <p>View and manage member attendance.</p>
+
+      {/* Page Header */}
+      <div className="page-header">
+        <div>
+          <h1>Attendance</h1>
+          <p>
+            View and manage member attendance.
+          </p>
+        </div>
       </div>
 
       {error && (
-        <div className="error-message">
+        <div className="attendance-error">
           {error}
         </div>
       )}
 
+      {/* Mark Attendance */}
       {canManage && (
         <div className="attendance-form-card">
-          <h2>
-            {editingId
-              ? "Update Attendance"
-              : "Mark Attendance"}
-          </h2>
 
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
+          <div className="attendance-card-header">
+            <div>
+              <h2>
+                {editingId
+                  ? "Update Attendance"
+                  : "Mark Attendance"}
+              </h2>
+
+              <p>
+                Record attendance for a member.
+              </p>
+            </div>
+          </div>
+
+          <form
+            className="attendance-form"
+            onSubmit={handleSubmit}
+          >
+
+            {/* Member */}
+            <div className="attendance-field">
               <label htmlFor="member">
                 Member
               </label>
@@ -156,7 +182,8 @@ const Attendance = () => {
               </select>
             </div>
 
-            <div className="form-group">
+            {/* Date */}
+            <div className="attendance-field">
               <label htmlFor="date">
                 Date
               </label>
@@ -171,7 +198,8 @@ const Attendance = () => {
               />
             </div>
 
-            <div className="form-group">
+            {/* Status */}
+            <div className="attendance-field">
               <label htmlFor="status">
                 Status
               </label>
@@ -197,84 +225,141 @@ const Attendance = () => {
               </select>
             </div>
 
-            <button type="submit">
-              {editingId
-                ? "Update Attendance"
-                : "Mark Attendance"}
-            </button>
+            {/* Buttons */}
+            <div className="attendance-form-actions">
 
-            {editingId && (
               <button
-                type="button"
-                onClick={resetForm}
+                type="submit"
+                className="primary-button"
               >
-                Cancel
+                {editingId
+                  ? "Update Attendance"
+                  : "Mark Attendance"}
               </button>
-            )}
+
+              {editingId && (
+                <button
+                  type="button"
+                  className="secondary-button"
+                  onClick={resetForm}
+                >
+                  Cancel
+                </button>
+              )}
+
+            </div>
           </form>
         </div>
       )}
 
-      <div className="attendance-card">
+      {/* Attendance Records */}
+      <div className="attendance-table-card">
+
+        <div className="attendance-card-header">
+          <div>
+            <h2>Attendance Records</h2>
+
+            <p>
+              View recorded member attendance.
+            </p>
+          </div>
+
+          <div className="attendance-count">
+            {attendance.length} records
+          </div>
+        </div>
+
         {loading ? (
-          <p>Loading attendance...</p>
+          <div className="attendance-empty">
+            <p>Loading attendance...</p>
+          </div>
         ) : attendance.length === 0 ? (
-          <p>No attendance records found.</p>
+          <div className="attendance-empty">
+            <p>No attendance records found.</p>
+          </div>
         ) : (
-          <table className="attendance-table">
-            <thead>
-              <tr>
-                <th>Member</th>
-                <th>Date</th>
-                <th>Status</th>
-                <th>Marked By</th>
+          <div className="attendance-table-wrapper">
 
-                {canManage && (
-                  <th>Actions</th>
-                )}
-              </tr>
-            </thead>
+            <table className="attendance-table">
 
-            <tbody>
-              {attendance.map((record) => (
-                <tr key={record._id}>
-                  <td>
-                    {record.member?.name ||
-                      "Unknown"}
-                  </td>
-
-                  <td>
-                    {record.date
-                      ? new Date(
-                          record.date
-                        ).toLocaleDateString()
-                      : ""}
-                  </td>
-
-                  <td>{record.status}</td>
-
-                  <td>
-                    {record.markedBy?.name ||
-                      "Unknown"}
-                  </td>
+              <thead>
+                <tr>
+                  <th>MEMBER</th>
+                  <th>DATE</th>
+                  <th>STATUS</th>
+                  <th>MARKED BY</th>
 
                   {canManage && (
-                    <td>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleEdit(record)
-                        }
-                      >
-                        Edit
-                      </button>
-                    </td>
+                    <th>ACTIONS</th>
                   )}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+
+              <tbody>
+                {attendance.map((record) => (
+                  <tr key={record._id}>
+
+                    <td>
+                      <div className="attendance-member">
+                        <div className="attendance-avatar">
+                          {record.member?.name
+                            ?.charAt(0)
+                            ?.toUpperCase() || "?"}
+                        </div>
+
+                        <span>
+                          {record.member?.name ||
+                            "Unknown"}
+                        </span>
+                      </div>
+                    </td>
+
+                    <td>
+                      {record.date
+                        ? new Date(
+                            record.date
+                          ).toLocaleDateString()
+                        : "-"}
+                    </td>
+
+                    <td>
+                      <span
+                        className={`attendance-status ${record.status
+                          ?.toLowerCase()
+                          .replace(" ", "-")}`}
+                      >
+                        {record.status}
+                      </span>
+                    </td>
+
+                    <td>
+                      {record.markedBy?.name ||
+                        "Unknown"}
+                    </td>
+
+                    {canManage && (
+                      <td>
+                        <button
+                          type="button"
+                          className="edit-button"
+                          onClick={() =>
+                            handleEdit(record)
+                          }
+                        >
+                          Edit
+                        </button>
+                      </td>
+                    )}
+
+                  </tr>
+                ))}
+              </tbody>
+
+            </table>
+
+          </div>
         )}
+
       </div>
     </div>
   );

@@ -40,6 +40,7 @@ const Login = () => {
       console.log("Login response:", response.data);
 
       login(response.data);
+
       navigate("/dashboard");
     } catch (error) {
       console.error("Login error:", error);
@@ -85,6 +86,7 @@ const Login = () => {
             Please login here
           </p>
 
+          {/* Error */}
           {error && (
             <div className="error-message">
               {error}
@@ -176,6 +178,7 @@ const Login = () => {
                 ? "Logging in..."
                 : "Login"}
             </button>
+
           </form>
 
           {/* Signup */}

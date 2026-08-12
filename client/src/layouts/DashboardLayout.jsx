@@ -29,25 +29,34 @@ function DashboardLayout() {
         {/* Navigation */}
         <nav className="sidebar-nav">
 
+          {/* Dashboard - Everyone */}
           <NavLink to="/dashboard">
             <span className="nav-icon">⌂</span>
             <span>Dashboard</span>
           </NavLink>
 
+          {/* All Members - Everyone */}
           <NavLink to="/members">
             <span className="nav-icon">👥</span>
-            <span>Members</span>
+            <span>All Members</span>
           </NavLink>
 
-          <NavLink to="/attendance">
-            <span className="nav-icon">✓</span>
-            <span>Attendance</span>
-          </NavLink>
+          {/* Attendance - Admin + Supervisor */}
+          {(user?.role === "Admin" ||
+            user?.role === "Supervisor") && (
+            <NavLink to="/attendance">
+              <span className="nav-icon">✓</span>
+              <span>Attendance</span>
+            </NavLink>
+          )}
 
-          <NavLink to="/reports">
-            <span className="nav-icon">▥</span>
-            <span>Reports</span>
-          </NavLink>
+          {/* Settings - Admin only */}
+          {user?.role === "Admin" && (
+            <NavLink to="/settings">
+              <span className="nav-icon">⚙</span>
+              <span>Settings</span>
+            </NavLink>
+          )}
 
         </nav>
 
@@ -57,7 +66,9 @@ function DashboardLayout() {
           <div className="user-info">
 
             <div className="user-avatar">
-              {(user?.name || "U").charAt(0).toUpperCase()}
+              {(user?.name || "U")
+                .charAt(0)
+                .toUpperCase()}
             </div>
 
             <div className="user-details">
@@ -82,8 +93,8 @@ function DashboardLayout() {
           </button>
 
         </div>
-      </aside>
 
+      </aside>
 
       {/* ================= MAIN ================= */}
       <main className="dashboard-main">
@@ -101,18 +112,23 @@ function DashboardLayout() {
               <span>Today</span>
 
               <strong>
-                {new Date().toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
-                })}
+                {new Date().toLocaleDateString(
+                  "en-US",
+                  {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  }
+                )}
               </strong>
             </div>
 
             <div className="header-user">
 
               <div className="header-avatar">
-                {(user?.name || "U").charAt(0).toUpperCase()}
+                {(user?.name || "U")
+                  .charAt(0)
+                  .toUpperCase()}
               </div>
 
               <div>
@@ -130,7 +146,6 @@ function DashboardLayout() {
           </div>
 
         </header>
-
 
         {/* Page */}
         <section className="dashboard-content">

@@ -46,11 +46,11 @@ const Signup = () => {
 
     try {
       setLoading(true);
-
       await api.post("/auth/signup", {
         name: formData.name,
         email: formData.email,
         password: formData.password,
+        confirmPassword: formData.confirmPassword,
         division: formData.division,
         year: formData.year,
       });
