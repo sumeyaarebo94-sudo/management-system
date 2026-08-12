@@ -12,6 +12,7 @@ const Login = () => {
     password: "",
   });
 
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -39,7 +40,6 @@ const Login = () => {
       console.log("Login response:", response.data);
 
       login(response.data);
-
       navigate("/dashboard");
     } catch (error) {
       console.error("Login error:", error);
@@ -63,48 +63,131 @@ const Login = () => {
 
   return (
     <div className="login-page">
-      <div className="login-card">
-        <h1>Login</h1>
+      <div className="login-panel">
+        <div className="login-form-container">
 
-        <p>Sign in to your account</p>
+          {/* Logo */}
+          <div className="login-logo">
+            <div className="logo-icon">
+              <span></span>
+              <span></span>
+            </div>
 
-        {error && <div className="error-message">{error}</div>}
-
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-
-            <input
-              id="email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Enter your email"
-              autoComplete="email"
-              required
-            />
+            <span className="logo-text">
+              LogoIpsum
+            </span>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
+          {/* Heading */}
+          <h1>Welcome 👋</h1>
 
-            <input
-              id="password"
-              name="password"
-              type="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Enter your password"
-              autoComplete="current-password"
-              required
-            />
-          </div>
+          <p className="login-subtitle">
+            Please login here
+          </p>
 
-          <button type="submit" disabled={loading}>
-            {loading ? "Logging in..." : "Login"}
+          {error && (
+            <div className="error-message">
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit}>
+
+            {/* Email */}
+            <div className="form-group">
+              <label htmlFor="email">
+                Email Address
+              </label>
+
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Enter your email"
+                autoComplete="email"
+                required
+              />
+            </div>
+
+            {/* Password */}
+            <div className="form-group">
+              <label htmlFor="password">
+                Password
+              </label>
+
+              <div className="password-wrapper">
+                <input
+                  id="password"
+                  name="password"
+                  type={
+                    showPassword
+                      ? "text"
+                      : "password"
+                  }
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Enter your password"
+                  autoComplete="current-password"
+                  required
+                />
+
+                <button
+                  type="button"
+                  className="password-eye"
+                  onClick={() =>
+                    setShowPassword(
+                      (previous) => !previous
+                    )
+                  }
+                  aria-label={
+                    showPassword
+                      ? "Hide password"
+                      : "Show password"
+                  }
+                >
+                  {showPassword ? "◉" : "◌"}
+                </button>
+              </div>
+            </div>
+
+            {/* Remember Me */}
+            <div className="remember-row">
+              <label className="remember-label">
+                <input
+                  type="checkbox"
+                  name="remember"
+                />
+
+                <span>
+                  Remember Me
+                </span>
+              </label>
+            </div>
+
+            {/* Login */}
+            <button
+              className="login-button"
+              type="submit"
+              disabled={loading}
+            >
+              {loading
+                ? "Logging in..."
+                : "Login"}
+            </button>
+          </form>
+
+          {/* Signup */}
+          <button
+            className="signup-link-button"
+            type="button"
+            onClick={() => navigate("/signup")}
+          >
+            Don't have an account? Sign Up
           </button>
-        </form>
+
+        </div>
       </div>
     </div>
   );

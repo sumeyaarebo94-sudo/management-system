@@ -14,6 +14,9 @@ const Signup = () => {
     year: "",
   });
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
@@ -52,9 +55,7 @@ const Signup = () => {
         year: formData.year,
       });
 
-      setSuccess(
-        "Account created successfully. You can now log in."
-      );
+      setSuccess("Account created successfully. You can now log in.");
 
       setTimeout(() => {
         navigate("/login");
@@ -72,8 +73,21 @@ const Signup = () => {
   return (
     <div className="signup-page">
       <div className="signup-card">
-        <h1>Sign Up</h1>
-        <p>Create your account</p>
+
+        {/* Logo */}
+        <div className="signup-logo">
+          <div className="signup-logo-icon">
+            <span></span>
+            <span></span>
+          </div>
+          <span>LogoIpsum</span>
+        </div>
+
+        {/* Heading */}
+        <h1>Create Account 👋</h1>
+        <p className="signup-subtitle">
+          Please create your account here
+        </p>
 
         {error && (
           <div className="error-message">
@@ -88,7 +102,9 @@ const Signup = () => {
         )}
 
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
+
+          {/* Full Name */}
+          <div className="signup-form-group">
             <label htmlFor="name">Full Name</label>
             <input
               id="name"
@@ -101,7 +117,8 @@ const Signup = () => {
             />
           </div>
 
-          <div className="form-group">
+          {/* Email */}
+          <div className="signup-form-group">
             <label htmlFor="email">Email Address</label>
             <input
               id="email"
@@ -114,40 +131,73 @@ const Signup = () => {
             />
           </div>
 
-          <div className="form-group">
+          {/* Password */}
+          <div className="signup-form-group">
             <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Minimum 8 characters"
-              minLength={8}
-              required
-            />
+
+            <div className="signup-password-wrapper">
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Minimum 8 characters"
+                minLength={8}
+                required
+              />
+
+              <button
+                type="button"
+                className="signup-password-eye"
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={
+                  showPassword ? "Hide password" : "Show password"
+                }
+              >
+                {showPassword ? "◉" : "◌"}
+              </button>
+            </div>
           </div>
 
-          <div className="form-group">
+          {/* Confirm Password */}
+          <div className="signup-form-group">
             <label htmlFor="confirmPassword">
               Confirm Password
             </label>
 
-            <input
-              id="confirmPassword"
-              name="confirmPassword"
-              type="password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              placeholder="Confirm your password"
-              minLength={8}
-              required
-            />
+            <div className="signup-password-wrapper">
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type={showConfirmPassword ? "text" : "password"}
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                placeholder="Confirm your password"
+                minLength={8}
+                required
+              />
+
+              <button
+                type="button"
+                className="signup-password-eye"
+                onClick={() =>
+                  setShowConfirmPassword(!showConfirmPassword)
+                }
+                aria-label={
+                  showConfirmPassword
+                    ? "Hide password"
+                    : "Show password"
+                }
+              >
+                {showConfirmPassword ? "◉" : "◌"}
+              </button>
+            </div>
           </div>
 
-          <div className="form-group">
+          {/* Division */}
+          <div className="signup-form-group">
             <label htmlFor="division">Division</label>
-
             <input
               id="division"
               name="division"
@@ -159,9 +209,9 @@ const Signup = () => {
             />
           </div>
 
-          <div className="form-group">
+          {/* Year */}
+          <div className="signup-form-group">
             <label htmlFor="year">Year</label>
-
             <input
               id="year"
               name="year"
@@ -173,18 +223,23 @@ const Signup = () => {
             />
           </div>
 
-          <button type="submit" disabled={loading}>
-            {loading
-              ? "Creating account..."
-              : "Sign Up"}
+          {/* Signup button */}
+          <button
+            type="submit"
+            className="signup-button"
+            disabled={loading}
+          >
+            {loading ? "Creating account..." : "Sign Up"}
           </button>
         </form>
 
+        {/* Login */}
         <button
           type="button"
+          className="signup-login-button"
           onClick={() => navigate("/login")}
         >
-          Already have an account? Login
+          Already have an account? <span>Login</span>
         </button>
       </div>
     </div>

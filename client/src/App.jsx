@@ -8,97 +8,81 @@ import Attendance from "./pages/Attendance";
 import Reports from "./pages/Reports";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
+import DashboardLayout from "./layouts/DashboardLayout";
 
 function App() {
   return (
     <Routes>
-      {/* Public */}
+      {/* Public pages */}
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
 
-      {/* Dashboard - all authenticated users */}
+      {/* Dashboard */}
       <Route
         path="/dashboard"
         element={
           <ProtectedRoute
-            allowedRoles={[
-              "Admin",
-              "Supervisor",
-              "User",
-            ]}
+            allowedRoles={["Admin", "Supervisor", "User"]}
           >
-            <Dashboard />
+            <DashboardLayout />
           </ProtectedRoute>
         }
-      />
+      >
+        <Route index element={<Dashboard />} />
+      </Route>
 
-      {/* Members - all authenticated users */}
+      {/* Members */}
       <Route
         path="/members"
         element={
           <ProtectedRoute
-            allowedRoles={[
-              "Admin",
-              "Supervisor",
-              "User",
-            ]}
+            allowedRoles={["Admin", "Supervisor", "User"]}
           >
-            <Members />
+            <DashboardLayout />
           </ProtectedRoute>
         }
-      />
+      >
+        <Route index element={<Members />} />
+      </Route>
 
-      {/* Attendance - Admin and Supervisor only */}
+      {/* Attendance */}
       <Route
         path="/attendance"
         element={
           <ProtectedRoute
-            allowedRoles={[
-              "Admin",
-              "Supervisor",
-            ]}
+            allowedRoles={["Admin", "Supervisor"]}
           >
-            <Attendance />
+            <DashboardLayout />
           </ProtectedRoute>
         }
-      />
+      >
+        <Route index element={<Attendance />} />
+      </Route>
 
-      {/* Reports - all authenticated users */}
+      {/* Reports */}
       <Route
         path="/reports"
         element={
           <ProtectedRoute
-            allowedRoles={[
-              "Admin",
-              "Supervisor",
-              "User",
-            ]}
+            allowedRoles={["Admin", "Supervisor", "User"]}
           >
-            <Reports />
+            <DashboardLayout />
           </ProtectedRoute>
         }
-      />
+      >
+        <Route index element={<Reports />} />
+      </Route>
 
       {/* Default */}
       <Route
         path="/"
-        element={
-          <Navigate
-            to="/dashboard"
-            replace
-          />
-        }
+        element={<Navigate to="/dashboard" replace />}
       />
 
       {/* Unknown route */}
       <Route
         path="*"
-        element={
-          <Navigate
-            to="/login"
-            replace
-          />
-        }
+        element={<Navigate to="/login" replace />}
       />
     </Routes>
   );
