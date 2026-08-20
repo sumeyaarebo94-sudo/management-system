@@ -54,7 +54,7 @@ const userSchema = new mongoose.Schema(
         message: "Please provide a valid URL.",
       },
     },
-    bootcampReason: { type: String, required: true, trim: true },
+    bootcampReason: { type: String, required: false, trim: true, default: "" },
     mentor: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
