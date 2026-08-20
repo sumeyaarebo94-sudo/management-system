@@ -40,6 +40,13 @@ export default function LoginPage() {
   const { login } = useAuth();
 
   // =========================
+  // GOOGLE LOGIN
+  // =========================
+  const handleGoogleLogin = () => {
+    window.location.href = `${API_URL}/auth/google`;
+  };
+
+  // =========================
   // LOGIN
   // =========================
   const handleLogin = async (e) => {
@@ -137,6 +144,12 @@ export default function LoginPage() {
         res.data.message ||
           "Registration successful. Pending admin approval."
       );
+
+      // Optional: return to login after successful signup
+      setTimeout(() => {
+        setIsSignup(false);
+        setSignupStep(1);
+      }, 1500);
     } catch (err) {
       console.error("REGISTRATION ERROR:", err);
 
@@ -156,10 +169,12 @@ export default function LoginPage() {
         {/* =====================================================
             STATIC BACKGROUND LOGO PANELS
         ====================================================== */}
+
         <div className="absolute inset-0 flex">
 
           {/* LEFT BACKGROUND */}
           <div className="flex w-1/2 flex-col items-center justify-center bg-[#c89b7b] p-8 text-center text-[#1e1713]">
+
             <span className="mb-2 text-xs font-bold uppercase tracking-widest">
               ASTUMSJ SUMMER BOOTCAMP
             </span>
@@ -185,6 +200,7 @@ export default function LoginPage() {
 
           {/* RIGHT BACKGROUND */}
           <div className="flex w-1/2 flex-col items-center justify-center bg-[#c89b7b] p-8 text-center text-[#1e1713]">
+
             <span className="mb-2 text-xs font-bold uppercase tracking-widest">
               ASTUMSJ SUMMER BOOTCAMP
             </span>
@@ -212,6 +228,7 @@ export default function LoginPage() {
         {/* =====================================================
             SLIDING FORM OVERLAY
         ====================================================== */}
+
         <div
           className={`absolute top-0 z-20 flex h-full w-1/2 flex-col justify-center overflow-y-auto bg-[#1e1713] px-10 text-[#f5efe6] shadow-2xl transition-transform duration-700 ease-in-out ${
             isSignup
@@ -220,9 +237,10 @@ export default function LoginPage() {
           }`}
         >
 
-          {/* ===================================================
+          {/* =================================================
               LOGIN
-          ==================================================== */}
+          ================================================== */}
+
           {!isSignup ? (
             <div>
 
@@ -237,12 +255,14 @@ export default function LoginPage() {
                 </p>
               )}
 
+              {/* ================= EMAIL/PASSWORD LOGIN ================= */}
+
               <form
                 onSubmit={handleLogin}
                 className="space-y-4"
               >
 
-                {/* ================= EMAIL ================= */}
+                {/* EMAIL */}
                 <div>
                   <label className="text-xs text-[#a39081]">
                     Email
@@ -260,7 +280,7 @@ export default function LoginPage() {
                   />
                 </div>
 
-                {/* ================= PASSWORD ================= */}
+                {/* PASSWORD */}
                 <div>
                   <label className="text-xs text-[#a39081]">
                     Password
@@ -304,7 +324,7 @@ export default function LoginPage() {
                       }
                     >
                       {showPassword ? (
-                        /* ================= OPEN EYE ================= */
+                        /* OPEN EYE */
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="20"
@@ -324,7 +344,7 @@ export default function LoginPage() {
                           />
                         </svg>
                       ) : (
-                        /* ================= CLOSED EYE ================= */
+                        /* CLOSED EYE */
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="20"
@@ -337,11 +357,8 @@ export default function LoginPage() {
                           strokeLinejoin="round"
                         >
                           <path d="M3 3l18 18" />
-
                           <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8" />
-
                           <path d="M9.9 4.2A10.8 10.8 0 0 1 12 4c6.5 0 10 8 10 8a17.3 17.3 0 0 1-3.1 4.2" />
-
                           <path d="M6.6 6.6C3.6 8.5 2 12 2 12s3.5 8 10 8a10.5 10.5 0 0 0 4.1-.8" />
                         </svg>
                       )}
@@ -360,7 +377,7 @@ export default function LoginPage() {
                   </div>
                 </div>
 
-                {/* ================= LOGIN BUTTON ================= */}
+                {/* LOGIN BUTTON */}
                 <button
                   type="submit"
                   disabled={loading}
@@ -373,7 +390,70 @@ export default function LoginPage() {
 
               </form>
 
-              {/* ================= SIGNUP LINK ================= */}
+              {/* =================================================
+                  GOOGLE LOGIN
+              ================================================== */}
+
+              <div className="mt-4">
+
+                {/* OR DIVIDER */}
+                <div className="mb-3 flex items-center gap-3">
+
+                  <div className="h-px flex-1 bg-[#4a3b32]" />
+
+                  <span className="text-[10px] text-[#a39081]">
+                    OR
+                  </span>
+
+                  <div className="h-px flex-1 bg-[#4a3b32]" />
+
+                </div>
+
+                {/* GOOGLE BUTTON */}
+                <button
+                  type="button"
+                  onClick={handleGoogleLogin}
+                  className="flex w-full items-center justify-center gap-3 rounded-xl border border-[#4a3b32] bg-white py-3 text-sm font-semibold text-[#1e1713] transition hover:bg-[#f5efe6]"
+                >
+
+                  {/* GOOGLE LOGO */}
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill="#4285F4"
+                      d="M21.35 12.23c0-.79-.07-1.55-.23-2.27H12v4.3h5.22a4.46 4.46 0 0 1-1.94 2.93v2.43h3.14c1.84-1.69 2.93-4.18 2.93-7.39z"
+                    />
+
+                    <path
+                      fill="#34A853"
+                      d="M12 21.5c2.63 0 4.84-.87 6.45-2.36l-3.14-2.43c-.87.58-1.98.92-3.31.92-2.54 0-4.69-1.72-5.46-4.03H3.3v2.51A9.74 9.74 0 0 0 12 21.5z"
+                    />
+
+                    <path
+                      fill="#FBBC05"
+                      d="M6.54 13.6a5.85 5.85 0 0 1 0-3.2V7.89H3.3a9.75 9.75 0 0 0 0 8.22l3.24-2.51z"
+                    />
+
+                    <path
+                      fill="#EA4335"
+                      d="M12 6.38c1.43 0 2.71.49 3.72 1.46l2.79-2.79C16.83 3.47 14.63 2.5 12 2.5a9.74 9.74 0 0 0-8.7 5.39l3.24 2.51C7.31 8.1 9.46 6.38 12 6.38z"
+                    />
+                  </svg>
+
+                  Continue with Google
+
+                </button>
+
+              </div>
+
+              {/* =================================================
+                  SIGNUP LINK
+              ================================================== */}
+
               <div className="mt-6 text-center text-xs text-[#a39081]">
 
                 {isRegistrationOpen ? (
@@ -406,6 +486,7 @@ export default function LoginPage() {
             /* =================================================
                SIGNUP
             ================================================== */
+
             <div>
 
               {/* HEADER */}
@@ -431,12 +512,14 @@ export default function LoginPage() {
               {/* =================================================
                   SIGNUP STEP 1
               ================================================== */}
+
               {signupStep === 1 ? (
 
                 <div className="space-y-2.5">
 
                   {/* FULL NAME */}
                   <div>
+
                     <label className="text-xs text-[#a39081]">
                       Full Name
                     </label>
@@ -451,10 +534,12 @@ export default function LoginPage() {
                       className="w-full rounded-xl border border-[#4a3b32] bg-transparent px-3 py-2 text-sm focus:border-[#c89b7b] focus:outline-none"
                       placeholder="Enter your full name"
                     />
+
                   </div>
 
                   {/* EMAIL */}
                   <div>
+
                     <label className="text-xs text-[#a39081]">
                       Email
                     </label>
@@ -469,10 +554,12 @@ export default function LoginPage() {
                       className="w-full rounded-xl border border-[#4a3b32] bg-transparent px-3 py-2 text-sm focus:border-[#c89b7b] focus:outline-none"
                       placeholder="Enter your email"
                     />
+
                   </div>
 
                   {/* PASSWORD */}
                   <div>
+
                     <label className="text-xs text-[#a39081]">
                       Password
                     </label>
@@ -488,10 +575,12 @@ export default function LoginPage() {
                       className="w-full rounded-xl border border-[#4a3b32] bg-transparent px-3 py-2 text-sm focus:border-[#c89b7b] focus:outline-none"
                       placeholder="Min 6 characters"
                     />
+
                   </div>
 
                   {/* CONFIRM PASSWORD */}
                   <div>
+
                     <label className="text-xs text-[#a39081]">
                       Confirm Password
                     </label>
@@ -502,13 +591,12 @@ export default function LoginPage() {
                       minLength={6}
                       value={confirmPassword}
                       onChange={(e) =>
-                        setConfirmPassword(
-                          e.target.value
-                        )
+                        setConfirmPassword(e.target.value)
                       }
                       className="w-full rounded-xl border border-[#4a3b32] bg-transparent px-3 py-2 text-sm focus:border-[#c89b7b] focus:outline-none"
                       placeholder="Confirm password"
                     />
+
                   </div>
 
                   {/* GENDER + YEAR */}
@@ -516,6 +604,7 @@ export default function LoginPage() {
 
                     {/* GENDER */}
                     <div>
+
                       <label className="text-xs text-[#a39081]">
                         Gender
                       </label>
@@ -527,6 +616,7 @@ export default function LoginPage() {
                         }
                         className="w-full rounded-xl border border-[#4a3b32] bg-[#1e1713] px-3 py-2 text-sm text-[#f5efe6] focus:border-[#c89b7b] focus:outline-none"
                       >
+
                         <option value="Male">
                           Male
                         </option>
@@ -534,11 +624,18 @@ export default function LoginPage() {
                         <option value="Female">
                           Female
                         </option>
+
+                        <option value="Other">
+                          Other
+                        </option>
+
                       </select>
+
                     </div>
 
                     {/* YEAR */}
                     <div>
+
                       <label className="text-xs text-[#a39081]">
                         Year of Study
                       </label>
@@ -546,12 +643,11 @@ export default function LoginPage() {
                       <select
                         value={yearOfStudy}
                         onChange={(e) =>
-                          setYearOfStudy(
-                            e.target.value
-                          )
+                          setYearOfStudy(e.target.value)
                         }
                         className="w-full rounded-xl border border-[#4a3b32] bg-[#1e1713] px-3 py-2 text-sm text-[#f5efe6] focus:border-[#c89b7b] focus:outline-none"
                       >
+
                         <option value="1st Year">
                           1st Year
                         </option>
@@ -571,13 +667,16 @@ export default function LoginPage() {
                         <option value="5th Year">
                           5th Year
                         </option>
+
                       </select>
+
                     </div>
 
                   </div>
 
                   {/* DEPARTMENT */}
                   <div>
+
                     <label className="text-xs text-[#a39081]">
                       Department
                     </label>
@@ -587,13 +686,12 @@ export default function LoginPage() {
                       required
                       value={department}
                       onChange={(e) =>
-                        setDepartment(
-                          e.target.value
-                        )
+                        setDepartment(e.target.value)
                       }
                       className="w-full rounded-xl border border-[#4a3b32] bg-transparent px-3 py-2 text-sm focus:border-[#c89b7b] focus:outline-none"
                       placeholder="e.g. Software Engineering"
                     />
+
                   </div>
 
                   {/* NEXT BUTTON */}
@@ -609,13 +707,12 @@ export default function LoginPage() {
                         department.trim()
                       ) {
 
-                        if (
-                          password !==
-                          confirmPassword
-                        ) {
+                        if (password !== confirmPassword) {
+
                           setMessage(
                             "Passwords do not match."
                           );
+
                           return;
                         }
 
@@ -643,6 +740,7 @@ export default function LoginPage() {
                 /* =================================================
                    SIGNUP STEP 2
                 ================================================== */
+
                 <form
                   onSubmit={handleFinalSignup}
                   className="space-y-2.5"
@@ -650,6 +748,7 @@ export default function LoginPage() {
 
                   {/* LEETCODE */}
                   <div>
+
                     <label className="text-xs text-[#a39081]">
                       LeetCode Profile URL
                     </label>
@@ -658,17 +757,17 @@ export default function LoginPage() {
                       type="url"
                       value={leetcodeUrl}
                       onChange={(e) =>
-                        setLeetcodeUrl(
-                          e.target.value
-                        )
+                        setLeetcodeUrl(e.target.value)
                       }
                       className="w-full rounded-xl border border-[#4a3b32] bg-transparent px-3 py-2 text-xs focus:border-[#c89b7b] focus:outline-none"
                       placeholder="https://leetcode.com/username"
                     />
+
                   </div>
 
                   {/* CODEFORCES */}
                   <div>
+
                     <label className="text-xs text-[#a39081]">
                       Codeforces Profile URL
                     </label>
@@ -677,17 +776,17 @@ export default function LoginPage() {
                       type="url"
                       value={codeforcesUrl}
                       onChange={(e) =>
-                        setCodeforcesUrl(
-                          e.target.value
-                        )
+                        setCodeforcesUrl(e.target.value)
                       }
                       className="w-full rounded-xl border border-[#4a3b32] bg-transparent px-3 py-2 text-xs focus:border-[#c89b7b] focus:outline-none"
                       placeholder="https://codeforces.com/profile/username"
                     />
+
                   </div>
 
                   {/* GITHUB */}
                   <div>
+
                     <label className="text-xs text-[#a39081]">
                       GitHub Profile URL
                     </label>
@@ -696,17 +795,17 @@ export default function LoginPage() {
                       type="url"
                       value={githubUrl}
                       onChange={(e) =>
-                        setGithubUrl(
-                          e.target.value
-                        )
+                        setGithubUrl(e.target.value)
                       }
                       className="w-full rounded-xl border border-[#4a3b32] bg-transparent px-3 py-2 text-xs focus:border-[#c89b7b] focus:outline-none"
                       placeholder="https://github.com/username"
                     />
+
                   </div>
 
                   {/* BOOTCAMP REASON */}
                   <div>
+
                     <label className="text-xs text-[#a39081]">
                       Why do you want to join this bootcamp? *
                     </label>
@@ -716,13 +815,12 @@ export default function LoginPage() {
                       rows="2"
                       value={bootcampReason}
                       onChange={(e) =>
-                        setBootcampReason(
-                          e.target.value
-                        )
+                        setBootcampReason(e.target.value)
                       }
                       className="w-full resize-none rounded-xl border border-[#4a3b32] bg-transparent px-3 py-2 text-xs focus:border-[#c89b7b] focus:outline-none"
                       placeholder="Briefly explain your motivation..."
                     />
+
                   </div>
 
                   {/* BACK + SUBMIT */}
@@ -754,6 +852,7 @@ export default function LoginPage() {
               )}
 
               {/* ================= LOGIN LINK ================= */}
+
               <div className="mt-3 text-center text-xs text-[#a39081]">
 
                 Already have an account?{" "}
